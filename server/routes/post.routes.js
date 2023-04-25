@@ -1,23 +1,19 @@
-const express = require("express")
-const router = express.Router()
+const express = require("express");
+const { setPosts } = require("../controller/post.controller");
+const router = express.Router();
 
-router.get("/", (req, res)=> {
-  res.json({message: "voici les donnéessss"})
-})
+router.get("/", (req, res) => {
+  res.json({ message: "voici les donnéessss" });
+});
 
-router.post("/", (req, res)=> {
-  console.log(req.body);
-  res.json({message: req.body.message})
-})
+router.post("/", setPosts);
 
-router.put("/:id", (req, res)=> {
-  res.json({messageId:req.params.id})
-})
+router.put("/:id", (req, res) => {
+  res.json({ messageId: req.params.id });
+});
 
-router.delete("/:id", (req, res)=> {
-  res.json({message : "Post supprimé id : " + req.params.id})
-})
+router.delete("/:id", (req, res) => {
+  res.json({ message: "Post supprimé id : " + req.params.id });
+});
 
-
-
-module.exports = router
+module.exports = router;
