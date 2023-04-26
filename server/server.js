@@ -8,12 +8,8 @@ connectDB();
 const app = express();
 
 app.use(express.json());
-app.use(express.urlencoded({extended : true}));
+app.use(express.urlencoded({ extended: true }));
 
+app.use("/post", require("./routes/post.routes"));
 
-app.use("/post", require("./routes/post.routes"))
-
-
-
-
-app.listen(port, ()=> console.log("Le serveur à démarré au port " + port))
+app.listen(port, () => console.log("Le serveur à démarré au port " + port));
