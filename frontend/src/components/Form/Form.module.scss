@@ -1,0 +1,59 @@
+.main {
+  background-color: rgb(255, 255, 255);
+  margin: 0 200px;
+  width: 700px;
+  padding: 30px 100px;
+  box-shadow: 0 0px 20px 0px rgba(0, 0, 0, 0.236);
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  font-size: 16px;
+  position: relative;
+
+  h2 {
+    margin-bottom: 50px;
+    text-align: left;
+  }
+  label {
+    display: block;
+    margin-bottom: 10px;
+  }
+  input {
+    width: 50%;
+    font-size: 16px;
+  }
+  .formInput {
+    margin-bottom: 20px;
+  }
+  .formAdress {
+    position: relative;
+    width: 540px;
+    border: 1px solid black;
+    transform: translateX(-20px);
+    padding: 40px 20px;
+    margin-top: 40px;
+
+    p {
+      position: fixed;
+      font-size: 20px;
+      top: -13px;
+      left: 20px;
+      background-color: white;
+    }
+  }
+  .zipCodeContainer {
+    margin-bottom: 0;
+  }
+  .listDepartment {
+    margin-top: 20px;
+    margin-bottom: 100px;
+  }
+  button {
+    position: absolute;
+    width: 130px;
+    height: 25px;
+    font-size: 16px;
+    right: 80px;
+    bottom: 25px;
+  }
+}

@@ -1,0 +1,38 @@
+.main {
+  position: relative;
+  width: 100%;
+  margin-bottom: 70px;
+}
+
+.dropdownMenu {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: rgb(241, 241, 241);
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 8px;
+  width: 50%;
+}
+
+.dropdownHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.dropdownOptions {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.dropdownOptions li {
+  padding: 8px;
+  cursor: pointer;
+}
+
+.dropdownOptions li:hover {
+  background-color: #f0f0f0;
+}
