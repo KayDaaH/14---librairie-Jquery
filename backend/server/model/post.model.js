@@ -2,16 +2,41 @@ const mongoose = require("mongoose");
 
 const postSchema = mongoose.Schema(
   {
-    message: {
+    firstName: {
       type: String,
       required: true,
     },
-    author: {
+    lastName: {
       type: String,
       required: true,
     },
-    likers: {
-      type: [String],
+    dateOfBirth: {
+      type: String,
+      required: true,
+    },
+    startDate: {
+      type: String,
+      required: true,
+    },
+    street: {
+      type: String,
+      required: true,
+    },
+    city: {
+      type: String,
+      required: true,
+    },
+    State: {
+      type: String,
+      required: true,
+    },
+    zipCode: {
+      type: String,
+      required: true,
+    },
+    department: {
+      type: String,
+      required: true,
     },
   },
   {

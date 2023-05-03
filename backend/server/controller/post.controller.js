@@ -9,13 +9,22 @@ module.exports.getPosts = async (req, res) => {
 };
 
 module.exports.setPosts = async (req, res) => {
-  if (!req.body.message) {
-    res.status(400).json({ message: "Merci d'ajouter un message" });
+  if (!req.body) {
+    res.status(400).json({
+      message: "Merci d'ajouter un message. vous avez entré la valuer : "`${req.body.city}`,
+    });
   }
 
   const post = await PostModel.create({
-    message: req.body.message,
-    author: req.body.author,
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    dateOfBirth: req.body.dateOfBirth,
+    startDate: req.body.startDate,
+    street: req.body.street,
+    city: req.body.city,
+    State: req.body.State,
+    zipCode: req.body.zipCode,
+    department: req.body.department,
   });
   res.status(200).json(post);
 };

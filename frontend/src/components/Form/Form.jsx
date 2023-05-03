@@ -1,42 +1,79 @@
 import React, { useEffect, useState, useContext } from "react";
 import styles from "./Form.module.scss";
 import locationMenu from "../../utils/menuState.json";
+import axios from "axios";
 
 const Form = () => {
+  const handleSubmit = async (event) => {
+    // event.preventDefault();
+    // console.log(event);
+
+    // console.log(event);
+    // const datasForm = event.map((option) => console.log(option));
+
+    const formData = new FormData(event.target);
+    const data = Object.fromEntries(formData.entries());
+    const dataString = JSON.stringify(data);
+
+    console.log(data);
+
+    console.log(dataString);
+    axios.post("http://localhost:5000/post/", data);
+  };
   return (
-    <form className={styles.main}>
+    <form className={styles.main} onSubmit={handleSubmit}>
       <div>
         <h2>Create employee</h2>
         <div className={styles.formInput}>
           <label htmlFor="firstName">First Name</label>
-          <input id="firstName" type="text" autoComplete="none" />
+          <input
+            id="firstName"
+            name="firstName"
+            type="text"
+            autoComplete="none"
+          />
         </div>
         <div className={styles.formInput}>
           <label htmlFor="lastName">Last Name</label>
-          <input id="lastName" type="text" autoComplete="none" />
+          <input
+            id="lastName"
+            name="lastName"
+            type="text"
+            autoComplete="none"
+          />
         </div>
         <div className={styles.formInput}>
           <label htmlFor="dateOfBirth">Date of Birth</label>
-          <input id="dateOfBirth" type="text" autoComplete="none" />
+          <input
+            id="dateOfBirth"
+            name="dateOfBirth"
+            type="text"
+            autoComplete="none"
+          />
         </div>
         <div className={styles.formInput}>
           <label htmlFor="startDate">Start Date</label>
-          <input id="startDate" type="text" autoComplete="none" />
+          <input
+            id="startDate"
+            name="startDate"
+            type="text"
+            autoComplete="none"
+          />
         </div>
         <div className={styles.formAdress}>
           <p>Address</p>
           <div className={styles.formInput}>
             <label htmlFor="street">Street</label>
-            <input id="street" type="text" autoComplete="none" />
+            <input id="street" name="street" type="text" autoComplete="none" />
           </div>
           <div className={styles.formInput}>
             <label htmlFor="city">City</label>
-            <input id="city" type="text" autoComplete="none" />
+            <input id="city" name="city" type="text" autoComplete="none" />
           </div>
           <div className={styles.formInput}>
-            <label htmlFor="location">State</label>
-            {/* <ListMenu locations={locationMenu} /> */}
-            <select className={styles.location} id="department">
+            <label htmlFor="State">State</label>
+            {/* <ListMenu States={StateMenu} /> */}
+            <select className={styles.selectOption} id="State" name="State">
               {locationMenu.map((option) => (
                 <option key={option.name}>{option.name}</option>
               ))}
@@ -44,12 +81,21 @@ const Form = () => {
           </div>
           <div className={styles.zipCodeContainer}>
             <label htmlFor="zipCode">Zip Code</label>
-            <input id="zipCode" type="text" autoComplete="none" />
+            <input
+              id="zipCode"
+              name="zipCode"
+              type="text"
+              autoComplete="none"
+            />
           </div>
         </div>
         <div className={styles.listDepartment}>
           <label htmlFor="department">Department</label>
-          <select className={styles.department} id="department">
+          <select
+            className={styles.selectOption}
+            id="department"
+            name="department"
+          >
             <option>Sales</option>
             <option>Marketing</option>
             <option>Engineering</option>
