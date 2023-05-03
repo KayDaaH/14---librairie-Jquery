@@ -1,17 +1,8 @@
-import React, { useEffect, useState } from "react";
-import ListMenu from "../ListMenu/ListMenu";
+import React, { useEffect, useState, useContext } from "react";
 import styles from "./Form.module.scss";
 import locationMenu from "../../utils/menuState.json";
 
 const Form = () => {
-  // const [location, setLocation] = useState([]);
-
-  // useEffect(() => {
-  //   fetch(locationMenu).then((res) =>
-  //     res.json().then((data) => setLocation(data))
-  //   );
-  // }, []);
-
   return (
     <form className={styles.main}>
       <div>
@@ -43,8 +34,13 @@ const Form = () => {
             <input id="city" type="text" autoComplete="none" />
           </div>
           <div className={styles.formInput}>
-            <label htmlFor="state">State</label>
-            <ListMenu locations={locationMenu} />
+            <label htmlFor="location">State</label>
+            {/* <ListMenu locations={locationMenu} /> */}
+            <select className={styles.location} id="department">
+              {locationMenu.map((option) => (
+                <option key={option.name}>{option.name}</option>
+              ))}
+            </select>
           </div>
           <div className={styles.zipCodeContainer}>
             <label htmlFor="zipCode">Zip Code</label>
@@ -52,8 +48,14 @@ const Form = () => {
           </div>
         </div>
         <div className={styles.listDepartment}>
-          <label htmlFor="state">Department</label>
-          <ListMenu />
+          <label htmlFor="department">Department</label>
+          <select className={styles.department} id="department">
+            <option>Sales</option>
+            <option>Marketing</option>
+            <option>Engineering</option>
+            <option>ces</option>
+            <option>Legal</option>
+          </select>
         </div>
         <button type="submit">Save</button>
       </div>
