@@ -5,19 +5,12 @@ import axios from "axios";
 
 const Form = () => {
   const handleSubmit = async (event) => {
-    // event.preventDefault();
-    // console.log(event);
-
-    // console.log(event);
-    // const datasForm = event.map((option) => console.log(option));
-
+    event.preventDefault();
     const formData = new FormData(event.target);
     const data = Object.fromEntries(formData.entries());
-    const dataString = JSON.stringify(data);
 
     console.log(data);
 
-    console.log(dataString);
     axios.post("http://localhost:5000/post/", data);
   };
   return (
