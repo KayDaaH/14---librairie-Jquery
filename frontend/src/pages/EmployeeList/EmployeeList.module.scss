@@ -1,0 +1,75 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.main {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+h1 {
+  margin: 40px;
+  font-size: 30px;
+}
+
+.searchBar {
+  display: flex;
+  width: 1000px;
+  justify-content: space-between;
+  margin-bottom: 10px;
+
+  .selectEntries {
+    display: flex;
+    align-items: center;
+
+    select {
+      margin: 0 5px;
+    }
+  }
+
+  form input {
+    font-size: 14px;
+    padding: 2px;
+  }
+}
+.listContainer {
+  display: flex;
+  flex-direction: column;
+  width: 1000px;
+  height: 500px;
+  background-color: rgb(228, 228, 228);
+
+  // .listSort {
+  //   display: flex;
+  //   justify-content: space-between;
+  //   width: 100%;
+  //   font-weight: bold;
+  //   padding: 5px;
+  //   cursor: pointer;
+  // }
+  .employeeList {
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+    padding: 5px 20px;
+    margin: 10px;
+    width: 100%;
+    height: 100%;
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+    li {
+      display: flex;
+      justify-content: space-between;
+      text-align: left;
+    }
+  }
+}
+.btnNavigation {
+  font-size: 12px;
+  padding: 5px;
+  margin-top: 15px;
+}

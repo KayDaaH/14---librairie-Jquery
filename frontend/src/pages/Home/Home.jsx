@@ -7,7 +7,7 @@ import styles from "./Home.module.scss";
 function Home() {
   return (
     <div className={styles.main}>
-      <h1 className={styles.title}>HRnet</h1>
+      <h1>HRnet</h1>
       <Link to="/employee-list">
         <button className={styles.btnNavigation}>View Current Employees</button>
       </Link>

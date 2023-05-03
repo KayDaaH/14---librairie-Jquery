@@ -11,7 +11,7 @@ module.exports.getPosts = async (req, res) => {
 module.exports.setPosts = async (req, res) => {
   if (!req.body) {
     res.status(400).json({
-      message: "Merci d'ajouter un message. vous avez entré la valuer : "`${req.body.city}`,
+      message: "Merci d'ajouter un message.",
     });
   }
 
