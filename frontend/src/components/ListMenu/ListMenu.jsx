@@ -1,13 +1,37 @@
 import React, { useState } from "react";
 import styles from "./ListMenu.module.scss";
 
-const ListMenu = () => {
-  const options = ["Arkansas", "Alaska", "Colorado", "California"];
-  const [selectedOption, setSelectedOption] = useState(options[0]);
+const ListMenu = ({ locations }) => {
+  let datas;
+  const department = [
+    {
+      name: "Sales",
+    },
+    {
+      name: "Marketing",
+    },
+    {
+      name: "Engineering",
+    },
+    {
+      name: "ces",
+    },
+    {
+      name: "Legal",
+    },
+  ];
+  if (locations) {
+    datas = locations;
+  } else {
+    datas = department;
+  }
+
+  const [selectedOption, setSelectedOption] = useState(datas[0].name);
   const [menuVisible, setMenuVisible] = useState(false);
 
   function handleOptionClick(option) {
-    setSelectedOption(option);
+    setSelectedOption(option.name);
+    console.log(option);
     setMenuVisible(false);
   }
 
@@ -16,18 +40,24 @@ const ListMenu = () => {
   }
   return (
     <div className={styles.main}>
-      <div className={styles.dropdownMenu}>
+      <div
+        className={`${styles.dropdownMenu} ${
+          menuVisible ? styles.visible : ""
+        }`}
+      >
         <div className={styles.dropdownHeader} onClick={toggleMenu}>
           {selectedOption} <i className="fa fa-chevron-down"></i>
         </div>
         {menuVisible && (
-          <ul className={styles.dropdownOptions}>
-            {options.map((option) => (
-              <li key={option} onClick={() => handleOptionClick(option)}>
-                {option}
-              </li>
-            ))}
-          </ul>
+          <div className={styles.menu}>
+            <ul className={styles.dropdownOptions}>
+              {datas.map((option) => (
+                <li key={option.name} onClick={() => handleOptionClick(option)}>
+                  {option.name}
+                </li>
+              ))}
+            </ul>
+          </div>
         )}
       </div>
     </div>

@@ -1,14 +1,17 @@
-import React from "react";
-import { useForm } from "react-hook-form";
+import React, { useEffect, useState } from "react";
 import ListMenu from "../ListMenu/ListMenu";
 import styles from "./Form.module.scss";
+import locationMenu from "../../utils/menuState.json";
 
 const Form = () => {
-  const {
-    handleSubmit,
-    register,
-    formState: { errors },
-  } = useForm();
+  // const [location, setLocation] = useState([]);
+
+  // useEffect(() => {
+  //   fetch(locationMenu).then((res) =>
+  //     res.json().then((data) => setLocation(data))
+  //   );
+  // }, []);
+
   return (
     <form className={styles.main}>
       <div>
@@ -41,7 +44,7 @@ const Form = () => {
           </div>
           <div className={styles.formInput}>
             <label htmlFor="state">State</label>
-            <ListMenu />
+            <ListMenu locations={locationMenu} />
           </div>
           <div className={styles.zipCodeContainer}>
             <label htmlFor="zipCode">Zip Code</label>
@@ -49,7 +52,7 @@ const Form = () => {
           </div>
         </div>
         <div className={styles.listDepartment}>
-          <label htmlFor="state">State</label>
+          <label htmlFor="state">Department</label>
           <ListMenu />
         </div>
         <button type="submit">Save</button>
