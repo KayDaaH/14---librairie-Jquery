@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import styles from "./Modal.module.scss";
 
 const Modal = ({ modalActive, closeModal }) => {
-  console.log(modalActive);
   const stopPropagation = (event) => {
     event.stopPropagation();
   };

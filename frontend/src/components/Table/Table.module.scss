@@ -17,6 +17,33 @@
   tr:first-child th {
     padding-bottom: 10px;
   }
+  .tableHeader {
+    position: relative;
+    label {
+      cursor: pointer;
+      align-items: center;
+    }
+  }
+
+  .tableHeaderTitle {
+    display: flex;
+  }
+  .tableHeaderLogos {
+    display: flex;
+    flex-direction: column;
+    margin-left: 5px;
+  }
+  .tableHeaderLogoTop {
+    width: 10px;
+    height: 10px;
+    margin-bottom: 1px;
+  }
+  .tableHeaderLogoBot {
+    width: 10px;
+    height: 10px;
+    transform: rotate(180deg);
+    margin-top: 1px;
+  }
 
   tbody tr {
     background-color: rgb(241, 241, 241);
@@ -84,7 +111,6 @@
       margin: 0 5px;
     }
   }
-
   form input {
     font-size: 14px;
     padding: 2px;

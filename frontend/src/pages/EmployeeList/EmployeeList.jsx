@@ -14,8 +14,6 @@ function EmployeeList() {
       .catch((err) => console.log(err));
   }, []);
 
-  console.log(data);
-
   return (
     <div className={styles.main}>
       <h1>Current Employees</h1>

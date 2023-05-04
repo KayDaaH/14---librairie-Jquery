@@ -2,7 +2,6 @@ import React from "react";
 import styles from "./TableLine.module.scss";
 
 const TableLine = ({ employee, index }) => {
-  console.log(employee);
   return (
     <>
       <td>{employee.firstName}</td>
