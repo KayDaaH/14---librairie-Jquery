@@ -1,0 +1,27 @@
+@import "react-datepicker/dist/react-datepicker.css";
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.react-datepicker__navigation {
+  position: absolute;
+  left: 50%;
+  border-color: 500px;
+}
+.react-datepicker__navigation-icon--next {
+  position: absolute;
+  left: 103px;
+  top: 2px;
+}
+
+.react-datepicker__navigation--previous {
+  position: absolute;
+  left: -50px;
+  top: 5px;
+}
+.react-datepicker__triangle {
+  left: -15px !important;
+}
