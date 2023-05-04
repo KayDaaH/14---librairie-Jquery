@@ -1,9 +1,3 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
 .main {
   width: 100%;
   display: flex;
@@ -18,7 +12,7 @@ h1 {
 
 .searchBar {
   display: flex;
-  width: 1000px;
+  width: 1300px;
   justify-content: space-between;
   margin-bottom: 10px;
 
@@ -43,14 +37,6 @@ h1 {
   height: 500px;
   background-color: rgb(228, 228, 228);
 
-  // .listSort {
-  //   display: flex;
-  //   justify-content: space-between;
-  //   width: 100%;
-  //   font-weight: bold;
-  //   padding: 5px;
-  //   cursor: pointer;
-  // }
   .employeeList {
     display: flex;
     flex-direction: column;
