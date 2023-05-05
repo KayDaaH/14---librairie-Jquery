@@ -4,6 +4,9 @@ import styles from "./Table.module.scss";
 
 const Table = ({ data }) => {
   const [orderBy, setOrderBy] = useState("");
+  const [numItems, setNumItems] = useState(10);
+  const [searchBar, setSearchBar] = useState("");
+
   const tableHeader = [
     "First Name",
     "Last Name",
@@ -16,30 +19,33 @@ const Table = ({ data }) => {
     "Zip Code",
   ];
 
+  console.log(searchBar);
   console.log(data);
-
-  const [color, setColor] = useState(false);
-
-  const logoColorChange = () => {
-    console.log(orderBy);
-  };
 
   return (
     <div className={styles.main}>
       <div className={styles.topSearchTable}>
         <div className={styles.selectEntries}>
           <label htmlFor="search">Show </label>
-          <select name="search" id="search">
-            <option value="100">100</option>
-            <option value="10">10</option>
+          <select
+            name="search"
+            id="search"
+            onChange={(e) => setNumItems(parseInt(e.target.value))}
+          >
+            ><option value="10">10</option>
             <option value="25">25</option>
             <option value="50">50</option>
+            <option value="100">100</option>
           </select>
           <p>entries</p>
         </div>
         <form>
           <label htmlFor="search">Search : </label>
-          <input type="text" id="search" />
+          <input
+            type="text"
+            id="search"
+            onChange={(e) => setSearchBar(e.target.value)}
+          />
         </form>
       </div>
       <table>
@@ -62,8 +68,6 @@ const Table = ({ data }) => {
                     } else {
                       setOrderBy(title);
                     }
-                    setColor(title);
-                    logoColorChange();
                   }}
                 />
                 <label htmlFor={title} className={styles.tableHeaderTitle}>
@@ -85,10 +89,7 @@ const Table = ({ data }) => {
                       preserveAspectRatio="xMidYMid meet"
                       className={styles.tableHeaderLogoBot}
                     >
-                      <polygon
-                        points="25 5 45 45 5 45"
-                        fill={color ? "#D8D8D8" : "#FF0000"}
-                      />
+                      <polygon points="25 5 45 45 5 45" fill="#D8D8D8" />
                     </svg>
                   </div>
                 </label>
@@ -99,6 +100,21 @@ const Table = ({ data }) => {
         <tbody>
           {data &&
             data
+              .slice(0, numItems)
+              .filter((item) =>
+                Object.entries(item).some(
+                  ([key, value]) =>
+                    key !== "_id" &&
+                    key !== "createdAt" &&
+                    key !== "updatedAt" &&
+                    key !== "__v" &&
+                    value &&
+                    value
+                      .toString()
+                      .toLowerCase()
+                      .includes(searchBar.toString().toLowerCase())
+                )
+              )
               .sort((a, b) => {
                 switch (orderBy) {
                   case "First Name":
