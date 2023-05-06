@@ -1,11 +1,147 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import TableLine from "../TableLine/TableLine";
 import styles from "./Table.module.scss";
 
 const Table = ({ data }) => {
   const [orderBy, setOrderBy] = useState("");
-  const [numItems, setNumItems] = useState(10);
+  const [employeesCountData, setEmployeesCountData] = useState("");
+  const [displayedEntriesSelected, setDisplayedEntriesSelected] = useState(10);
   const [searchBar, setSearchBar] = useState("");
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(
+    Math.ceil(data.length / displayedEntriesSelected)
+  );
+  const [startIndex, setStartIndex] = useState(0);
+  const [endIndex, setEndIndex] = useState(0 + displayedEntriesSelected);
+  const [entriesToShow, setEntriesToShow] = useState(
+    data.slice(startIndex, endIndex)
+  );
+
+  const handlePrevPage = async () => {
+    setCurrentPage(currentPage - 1);
+    let currentStartIndex;
+    await setStartIndex(
+      (current) => (currentStartIndex = current - displayedEntriesSelected)
+    );
+    setEndIndex(currentStartIndex + displayedEntriesSelected);
+  };
+  const handleNextPage = async () => {
+    setCurrentPage(currentPage + 1);
+    let currentStartIndex;
+    await setStartIndex(
+      (current) => (currentStartIndex = currentPage * displayedEntriesSelected)
+    );
+    setEndIndex(currentStartIndex + displayedEntriesSelected);
+  };
+
+  const renderPageButtons = () => {
+    const pageButtons = [];
+
+    if (totalPages <= 3) {
+      for (let i = 1; i <= totalPages; i++) {
+        pageButtons.push(
+          <button key={i} onClick={() => handlePageChange(i)}>
+            {i}
+          </button>
+        );
+      }
+    } else {
+      let leftButton = null;
+      let middleButton = null;
+      let rightButton = null;
+
+      if (currentPage === 1) {
+        leftButton = (
+          <button key={1} onClick={() => handlePageChange(1)}>
+            {1}
+          </button>
+        );
+        middleButton = (
+          <button key={2} onClick={() => handlePageChange(2)}>
+            {2}
+          </button>
+        );
+        rightButton = (
+          <button key={3} onClick={() => handlePageChange(3)}>
+            {3}
+          </button>
+        );
+      } else if (currentPage === totalPages) {
+        leftButton = (
+          <button
+            key={totalPages - 2}
+            onClick={() => handlePageChange(totalPages - 2)}
+          >
+            {totalPages - 2}
+          </button>
+        );
+        middleButton = (
+          <button
+            key={totalPages - 1}
+            onClick={() => handlePageChange(totalPages - 1)}
+          >
+            {totalPages - 1}
+          </button>
+        );
+        rightButton = (
+          <button key={totalPages} onClick={() => handlePageChange(totalPages)}>
+            {totalPages}
+          </button>
+        );
+      } else {
+        leftButton = (
+          <button
+            key={currentPage - 1}
+            onClick={() => handlePageChange(currentPage - 1)}
+          >
+            {currentPage - 1}
+          </button>
+        );
+        middleButton = (
+          <button
+            key={currentPage}
+            onClick={() => handlePageChange(currentPage)}
+          >
+            {currentPage}
+          </button>
+        );
+        rightButton = (
+          <button
+            key={currentPage + 1}
+            onClick={() => handlePageChange(currentPage + 1)}
+          >
+            {currentPage + 1}
+          </button>
+        );
+      }
+
+      pageButtons.push(
+        <button
+          key="prev"
+          onClick={() => handlePrevPage()}
+          disabled={currentPage === 1}
+        >
+          Prev
+        </button>
+      );
+
+      pageButtons.push(leftButton);
+      pageButtons.push(middleButton);
+      pageButtons.push(rightButton);
+
+      pageButtons.push(
+        <button
+          key="next"
+          onClick={() => handleNextPage()}
+          disabled={currentPage === totalPages}
+        >
+          Next
+        </button>
+      );
+    }
+    return pageButtons;
+  };
 
   const tableHeader = [
     "First Name",
@@ -19,8 +155,12 @@ const Table = ({ data }) => {
     "Zip Code",
   ];
 
-  console.log(searchBar);
-  console.log(data);
+  useEffect(() => {
+    setTotalPages(Math.ceil(data.length / displayedEntriesSelected));
+    setEmployeesCountData(data.length);
+    setEndIndex(startIndex + displayedEntriesSelected);
+    renderPageButtons();
+  }, [data, searchBar, orderBy, displayedEntriesSelected]);
 
   return (
     <div className={styles.main}>
@@ -30,7 +170,10 @@ const Table = ({ data }) => {
           <select
             name="search"
             id="search"
-            onChange={(e) => setNumItems(parseInt(e.target.value))}
+            onChange={(e) =>
+              setDisplayedEntriesSelected(parseInt(e.target.value))
+            }
+            // onChange={(e) => setdisplayedEntriesSelected(parseInt(e.target.value))}
           >
             ><option value="10">10</option>
             <option value="25">25</option>
@@ -100,21 +243,6 @@ const Table = ({ data }) => {
         <tbody>
           {data &&
             data
-              .slice(0, numItems)
-              .filter((item) =>
-                Object.entries(item).some(
-                  ([key, value]) =>
-                    key !== "_id" &&
-                    key !== "createdAt" &&
-                    key !== "updatedAt" &&
-                    key !== "__v" &&
-                    value &&
-                    value
-                      .toString()
-                      .toLowerCase()
-                      .includes(searchBar.toString().toLowerCase())
-                )
-              )
               .sort((a, b) => {
                 switch (orderBy) {
                   case "First Name":
@@ -250,6 +378,21 @@ const Table = ({ data }) => {
                     }
                 }
               })
+              .slice(startIndex, endIndex)
+              .filter((item) =>
+                Object.entries(item).some(
+                  ([key, value]) =>
+                    key !== "_id" &&
+                    key !== "createdAt" &&
+                    key !== "updatedAt" &&
+                    key !== "__v" &&
+                    value &&
+                    value
+                      .toString()
+                      .toLowerCase()
+                      .includes(searchBar.toString().toLowerCase())
+                )
+              )
               .map((employee, index) => (
                 <tr key={employee._id}>
                   <TableLine employee={employee} index={index} />
@@ -257,6 +400,35 @@ const Table = ({ data }) => {
               ))}
         </tbody>
       </table>
+      {/* <div className={styles.entryCounter}>
+        Showing 1 of 10 of {employeesCountData} entries
+      </div> */}
+      <div className={styles.tableFooter}>
+        {/* <button onClick={handlePrevPage} disabled={currentPage === 1}>
+          Previous
+        </button>
+        {renderPageButtons()}
+        <button onClick={handleNextPage} disabled={currentPage === totalPages}>
+          Next
+        </button> */}
+        {/* <button
+          key="prev"
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+          className={styles.previousBut}
+        >
+          Previous
+        </button> */}
+        <div>{renderPageButtons()}</div>
+        {/* <button
+          key="next"
+          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+          className={styles.NextBut}
+        >
+          Next
+        </button> */}
+      </div>
     </div>
   );
 };
