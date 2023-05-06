@@ -18,6 +18,18 @@ const Table = ({ data }) => {
     data.slice(startIndex, endIndex)
   );
 
+  const displayedEntriesSelectedFunc = async (e) => {
+    let NumEntriesSelected;
+    setDisplayedEntriesSelected(
+      (current) => (NumEntriesSelected = parseInt(e.target.value))
+    );
+    await setCurrentPage(1);
+    let currentStartIndex = 0;
+    await setStartIndex(0);
+    setEndIndex(NumEntriesSelected);
+    renderPageButtons();
+  };
+
   const handlePrevPage = async () => {
     setCurrentPage(currentPage - 1);
     let currentStartIndex;
@@ -35,17 +47,52 @@ const Table = ({ data }) => {
     setEndIndex(currentStartIndex + displayedEntriesSelected);
   };
 
+  const handlePageChange = async (page) => {
+    setCurrentPage(page);
+    let currentPageSync;
+    setCurrentPage((current) => (currentPageSync = current));
+    let currentStartIndex;
+    await setStartIndex(
+      (current) =>
+        (currentStartIndex =
+          currentPageSync * displayedEntriesSelected - displayedEntriesSelected)
+    );
+    setEndIndex(currentStartIndex + displayedEntriesSelected);
+  };
+
   const renderPageButtons = () => {
     const pageButtons = [];
 
     if (totalPages <= 3) {
+      pageButtons.push(
+        <button
+          key="prev"
+          onClick={() => handlePrevPage()}
+          disabled={currentPage === 1}
+        >
+          Prev
+        </button>
+      );
       for (let i = 1; i <= totalPages; i++) {
         pageButtons.push(
-          <button key={i} onClick={() => handlePageChange(i)}>
+          <button
+            key={i}
+            disabled={currentPage === i}
+            onClick={() => handlePageChange(i)}
+          >
             {i}
           </button>
         );
       }
+      pageButtons.push(
+        <button
+          key="next"
+          onClick={() => handleNextPage()}
+          disabled={currentPage === totalPages}
+        >
+          Next
+        </button>
+      );
     } else {
       let leftButton = null;
       let middleButton = null;
@@ -72,6 +119,7 @@ const Table = ({ data }) => {
           <button
             key={totalPages - 2}
             onClick={() => handlePageChange(totalPages - 2)}
+            disabled={currentPage === totalPages - 2}
           >
             {totalPages - 2}
           </button>
@@ -80,12 +128,17 @@ const Table = ({ data }) => {
           <button
             key={totalPages - 1}
             onClick={() => handlePageChange(totalPages - 1)}
+            disabled={currentPage === totalPages - 1}
           >
             {totalPages - 1}
           </button>
         );
         rightButton = (
-          <button key={totalPages} onClick={() => handlePageChange(totalPages)}>
+          <button
+            key={totalPages}
+            disabled={currentPage === totalPages}
+            onClick={() => handlePageChange(totalPages)}
+          >
             {totalPages}
           </button>
         );
@@ -94,6 +147,7 @@ const Table = ({ data }) => {
           <button
             key={currentPage - 1}
             onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === currentPage - 1}
           >
             {currentPage - 1}
           </button>
@@ -102,6 +156,7 @@ const Table = ({ data }) => {
           <button
             key={currentPage}
             onClick={() => handlePageChange(currentPage)}
+            disabled={currentPage}
           >
             {currentPage}
           </button>
@@ -110,6 +165,7 @@ const Table = ({ data }) => {
           <button
             key={currentPage + 1}
             onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === currentPage + 1}
           >
             {currentPage + 1}
           </button>
@@ -158,7 +214,6 @@ const Table = ({ data }) => {
   useEffect(() => {
     setTotalPages(Math.ceil(data.length / displayedEntriesSelected));
     setEmployeesCountData(data.length);
-    setEndIndex(startIndex + displayedEntriesSelected);
     renderPageButtons();
   }, [data, searchBar, orderBy, displayedEntriesSelected]);
 
@@ -170,9 +225,7 @@ const Table = ({ data }) => {
           <select
             name="search"
             id="search"
-            onChange={(e) =>
-              setDisplayedEntriesSelected(parseInt(e.target.value))
-            }
+            onChange={(e) => displayedEntriesSelectedFunc(e)}
             // onChange={(e) => setdisplayedEntriesSelected(parseInt(e.target.value))}
           >
             ><option value="10">10</option>
