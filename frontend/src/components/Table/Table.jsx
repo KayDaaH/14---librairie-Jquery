@@ -184,13 +184,10 @@ const Table = ({ data }) => {
   //--------------------------------------------------------------------------
 
   const ttt = () => {
-    console.log(dataSorted());
     if (dataSorted().length !== 0) {
       const bulle = dataSorted().slice(startIndex, endIndex);
-      console.log("hshshshsh");
       return bulle;
     } else {
-      console.log("Heloo");
       return <div className={styles.noMatching}>No matching records found</div>;
     }
   };
@@ -310,7 +307,6 @@ const Table = ({ data }) => {
   const renderPageButtons = () => {
     let totalPagesss = Math.ceil(dataSortedLength / displayedEntriesSelected);
     const pageButtons = [];
-    console.log(totalPagesss);
 
     if (totalPagesss === 0 || totalPagesss === 1) {
       return;
@@ -491,6 +487,46 @@ const Table = ({ data }) => {
   let totalPagesSearchBar;
   let totalPagesSearchBarNope;
 
+  const [svgStatesTop, setSvgStatesTop] = useState("");
+
+  const [svgStatesBot, setSvgStatesBot] = useState(
+    tableHeader.reduce((acc, title) => {
+      // console.log("acc:", acc);
+      // console.log("title:", title);
+      return { ...acc, [title]: title };
+    }, {})
+  );
+
+  const [titleID, settitleID] = useState("");
+  const [svgClassTop, setSvgClassTop] = useState(styles.polygonBlack);
+  const [svgClassBot, setSvgClassBot] = useState(styles.polygonBlack);
+  const [svgClassBasic, setSvgClassBasic] = useState("");
+
+  const handleClick = (title) => {
+    settitleID(title);
+    console.log(titleID);
+
+    // console.log(svgStatesTop[title]);
+    // if (svgStatesTop === "") {
+    //   setSvgStatesTop(title);
+    // } else if (svgStatesTop === title) {
+    //   setSvgStatesTop(title + "active");
+    // } else {
+    //   setSvgStatesTop("");
+    // setSvgClass(styles.BasicColor);
+    // }
+
+    if (orderBy === title) {
+      setOrderBy(title + "reverse");
+      setSvgClassTop(styles.polygonBlack);
+      setSvgClassBot(styles.polygonBasic);
+    } else {
+      setOrderBy(title);
+      setSvgClassTop(styles.polygonBasic);
+      setSvgClassBot(styles.polygonBlack);
+    }
+  };
+
   return (
     <div className={styles.main}>
       <div className={styles.topSearchTable}>
@@ -532,13 +568,14 @@ const Table = ({ data }) => {
                       ? true
                       : false
                   }
-                  onClick={() => {
-                    if (orderBy === title) {
-                      setOrderBy(title + "reverse");
-                    } else {
-                      setOrderBy(title);
-                    }
-                  }}
+                  onClick={() => handleClick(title)}
+                  // onClick={() => {
+                  //   if (orderBy === title) {
+                  //     setOrderBy(title + "reverse");
+                  //   } else {
+                  //     setOrderBy(title);
+                  //   }
+                  // }}
                 />
                 <label htmlFor={title} className={styles.tableHeaderTitle}>
                   <p>{title}</p>
@@ -548,7 +585,9 @@ const Table = ({ data }) => {
                       height="50"
                       viewBox="0 0 50 50"
                       preserveAspectRatio="xMidYMid meet"
-                      className={styles.tableHeaderLogoTop}
+                      className={`${styles.tableHeaderLogoTop} ${
+                        titleID === title ? svgClassTop : svgClassBasic
+                      }`}
                     >
                       <polygon points="25 5 45 45 5 45" fill="#D8D8D8" />
                     </svg>
@@ -557,7 +596,9 @@ const Table = ({ data }) => {
                       height="50"
                       viewBox="0 0 50 50"
                       preserveAspectRatio="xMidYMid meet"
-                      className={styles.tableHeaderLogoBot}
+                      className={`${styles.tableHeaderLogoBot} ${
+                        titleID === title ? svgClassBot : svgClassBasic
+                      }`}
                     >
                       <polygon points="25 5 45 45 5 45" fill="#D8D8D8" />
                     </svg>

@@ -203,3 +203,13 @@ table td:hover:after {
   border-top: 1px solid black;
   border-bottom: 1px solid black;
 }
+
+.tableHeaderLogoActive polygon {
+  fill: black;
+}
+.polygonBasic polygon {
+  fill: #d8d8d8;
+}
+.polygonBlack polygon {
+  fill: black;
+}
