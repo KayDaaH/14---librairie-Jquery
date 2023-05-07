@@ -6,17 +6,230 @@ const Table = ({ data }) => {
   const [orderBy, setOrderBy] = useState("");
   const [employeesCountData, setEmployeesCountData] = useState("");
   const [displayedEntriesSelected, setDisplayedEntriesSelected] = useState(10);
-  const [searchBar, setSearchBar] = useState("");
 
-  const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(
-    Math.ceil(data.length / displayedEntriesSelected)
+    Math.ceil(parseInt(data.length) / parseInt(displayedEntriesSelected))
   );
+  const [searchBar, setSearchBar] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchBarPROVVVVVV, setSearchBarPROVVVVVV] = useState("searchBar");
   const [startIndex, setStartIndex] = useState(0);
-  const [endIndex, setEndIndex] = useState(0 + displayedEntriesSelected);
+  const [endIndex, setEndIndex] = useState(displayedEntriesSelected);
+
+  const [dataSortedLength, setDataSortedLength] = useState(0);
+  const [searchBarOn, setSearchBarOn] = useState(false);
   const [entriesToShow, setEntriesToShow] = useState(
     data.slice(startIndex, endIndex)
   );
+
+  const dataSorted = () => {
+    const newDataSorted =
+      data &&
+      data
+        .sort((a, b) => {
+          switch (orderBy) {
+            case "First Name":
+              return a.firstName && b.firstName
+                ? a.firstName.localeCompare(b.firstName)
+                : a.firstName
+                ? 1
+                : -1;
+            case "First Namereverse":
+              return a.firstName && b.firstName
+                ? b.firstName.localeCompare(a.firstName)
+                : b.firstName
+                ? 1
+                : -1;
+
+            case "Last Name":
+              return a.lastName && b.lastName
+                ? a.lastName.localeCompare(b.lastName)
+                : a.lastName
+                ? 1
+                : -1;
+            case "Last Namereverse":
+              return a.lastName && b.lastName
+                ? b.lastName.localeCompare(a.lastName)
+                : b.lastName
+                ? 1
+                : -1;
+            case "Start Date":
+              if (a.startDate && b.startDate) {
+                return Date.parse(a.startDate) - Date.parse(b.startDate);
+              } else if (!a.startDate) {
+                return -Number.MAX_SAFE_INTEGER;
+              } else {
+                return Number.MAX_SAFE_INTEGER;
+              }
+            case "Start Datereverse":
+              if (a.startDate && b.startDate) {
+                return Date.parse(b.startDate) - Date.parse(a.startDate);
+              } else if (!a.startDate) {
+                return Number.MAX_SAFE_INTEGER;
+              } else {
+                return -Number.MAX_SAFE_INTEGER;
+              }
+
+            case "Department":
+              return a.department && b.department
+                ? a.department.localeCompare(b.department)
+                : a.department
+                ? 1
+                : -1;
+            case "Departmentreverse":
+              return a.department && b.department
+                ? b.department.localeCompare(a.department)
+                : b.department
+                ? 1
+                : -1;
+
+            case "Date of Birth":
+              if (a.dateOfBirth && b.dateOfBirth) {
+                return Date.parse(a.dateOfBirth) - Date.parse(b.dateOfBirth);
+              } else if (!a.dateOfBirth) {
+                return -Number.MAX_SAFE_INTEGER;
+              } else {
+                return Number.MAX_SAFE_INTEGER;
+              }
+            case "Date of Birthreverse":
+              if (a.dateOfBirth && b.dateOfBirth) {
+                return Date.parse(b.dateOfBirth) - Date.parse(a.dateOfBirth);
+              } else if (!a.dateOfBirth) {
+                return Number.MAX_SAFE_INTEGER;
+              } else {
+                return -Number.MAX_SAFE_INTEGER;
+              }
+            case "Street":
+              return a.street && b.street
+                ? a.street.localeCompare(b.street)
+                : a.street
+                ? 1
+                : -1;
+            case "Streetreverse":
+              return a.street && b.street
+                ? b.street.localeCompare(a.street)
+                : b.street
+                ? 1
+                : -1;
+            case "City":
+              return a.city && b.city
+                ? a.city.localeCompare(b.city)
+                : a.city
+                ? 1
+                : -1;
+            case "Cityreverse":
+              return a.city && b.city
+                ? b.city.localeCompare(a.city)
+                : b.city
+                ? 1
+                : -1;
+            case "State":
+              return a.State && b.State
+                ? a.State.localeCompare(b.State)
+                : a.State
+                ? 1
+                : -1;
+            case "Statereverse":
+              return a.State && b.State
+                ? b.State.localeCompare(a.State)
+                : b.State
+                ? 1
+                : -1;
+            case "Zip Code":
+              if (a.zipCode && b.zipCode) {
+                return a.zipCode - b.zipCode;
+              } else if (a.zipCode) {
+                return 1;
+              } else if (b.zipCode) {
+                return -1;
+              } else {
+                return 0;
+              }
+            case "Zip Codereverse":
+              if (a.zipCode && b.zipCode) {
+                return b.zipCode - a.zipCode;
+              } else if (a.zipCode) {
+                return -1;
+              } else if (b.zipCode) {
+                return 1;
+              } else {
+                return 0;
+              }
+          }
+        })
+        // .slice(startIndex, endIndex)
+        .filter((item) =>
+          Object.entries(item).some(
+            ([key, value]) =>
+              key !== "_id" &&
+              key !== "createdAt" &&
+              key !== "updatedAt" &&
+              key !== "__v" &&
+              value &&
+              value
+                .toString()
+                .toLowerCase()
+                .includes(searchBar.toString().toLowerCase())
+          )
+        )
+        .map((employee, index) => (
+          <tr key={employee._id}>
+            <TableLine employee={employee} index={index} />
+          </tr>
+        ));
+    return newDataSorted;
+  };
+  //--------------------------------------------------------------------------
+  //--------------------------------------------------------------------------
+  //--------------------------------------------------------------------------
+
+  const ttt = () => {
+    console.log(dataSorted());
+    if (dataSorted().length !== 0) {
+      const bulle = dataSorted().slice(startIndex, endIndex);
+      console.log("hshshshsh");
+      return bulle;
+    } else {
+      console.log("Heloo");
+      return <div className={styles.noMatching}>No matching records found</div>;
+    }
+  };
+
+  //--------------------------------------------------------------------------
+  //--------------------------------------------------------------------------
+  //--------------------------------------------------------------------------
+  const triDuMerdierDeLaSearchBar = (e) => {
+    setSearchBar((current) => {
+      const searchBarValue = e.target.value;
+      return searchBarValue;
+    });
+  };
+
+  useEffect(() => {
+    if (searchBar) {
+      setSearchBarOn(true);
+    } else {
+      setSearchBarOn(false);
+    }
+  }, [searchBar]);
+
+  //--------------------------------------------------------------------------
+  //--------------------------------------------------------------------------
+  //--------------------------------------------------------------------------
+
+  useEffect(() => {
+    setDataSortedLength(dataSorted().length);
+    setEmployeesCountData(data.length);
+    setStartIndex(0);
+    setEndIndex(displayedEntriesSelected);
+    renderPageButtons();
+
+    setCurrentPage(1);
+  }, [data, orderBy, displayedEntriesSelected, searchBarOn, searchBar]);
+
+  //--------------------------------------------------------------------------
+  //--------------------------------------------------------------------------
+  //--------------------------------------------------------------------------
 
   const displayedEntriesSelectedFunc = async (e) => {
     let NumEntriesSelected;
@@ -27,8 +240,11 @@ const Table = ({ data }) => {
     let currentStartIndex = 0;
     await setStartIndex(0);
     setEndIndex(NumEntriesSelected);
-    renderPageButtons();
   };
+
+  //--------------------------------------------------------------------------
+  //--------------------------------------------------------------------------
+  //--------------------------------------------------------------------------
 
   const handlePrevPage = async () => {
     setCurrentPage(currentPage - 1);
@@ -38,6 +254,10 @@ const Table = ({ data }) => {
     );
     setEndIndex(currentStartIndex + displayedEntriesSelected);
   };
+
+  //--------------------------------------------------------------------------
+  //--------------------------------------------------------------------------
+  //--------------------------------------------------------------------------
   const handleNextPage = async () => {
     setCurrentPage(currentPage + 1);
     let currentStartIndex;
@@ -46,6 +266,10 @@ const Table = ({ data }) => {
     );
     setEndIndex(currentStartIndex + displayedEntriesSelected);
   };
+
+  //--------------------------------------------------------------------------
+  //--------------------------------------------------------------------------
+  //--------------------------------------------------------------------------
 
   const handlePageChange = async (page) => {
     setCurrentPage(page);
@@ -59,13 +283,43 @@ const Table = ({ data }) => {
     );
     setEndIndex(currentStartIndex + displayedEntriesSelected);
   };
+  //--------------------------------------------------------------------------
+  //--------------------------------------------------------------------------
+  //--------------------------------------------------------------------------
+
+  const information = () => {
+    if (!searchBarOn) {
+      const information = `Showing ${
+        dataSortedLength === 0 ? startIndex : startIndex + 1
+      } to ${endIndex >= dataSortedLength ? dataSortedLength : endIndex}
+      of ${dataSortedLength} entries`;
+      return information;
+    } else {
+      const information = `Showing ${
+        dataSortedLength === 0 ? startIndex : startIndex + 1
+      } to ${endIndex >= dataSortedLength ? dataSortedLength : endIndex}
+      of ${dataSortedLength} entries (filtered from ${data.length} entries)`;
+      return information;
+    }
+  };
+
+  //--------------------------------------------------------------------------
+  //--------------------------------------------------------------------------
+  //--------------------------------------------------------------------------
 
   const renderPageButtons = () => {
+    let totalPagesss = Math.ceil(dataSortedLength / displayedEntriesSelected);
     const pageButtons = [];
+    console.log(totalPagesss);
 
-    if (totalPages <= 3) {
+    if (totalPagesss === 0 || totalPagesss === 1) {
+      return;
+    }
+
+    if (totalPagesss <= 3) {
       pageButtons.push(
         <button
+          className={styles.navigationButton}
           key="prev"
           onClick={() => handlePrevPage()}
           disabled={currentPage === 1}
@@ -73,9 +327,10 @@ const Table = ({ data }) => {
           Prev
         </button>
       );
-      for (let i = 1; i <= totalPages; i++) {
+      for (let i = 1; i <= totalPagesss; i++) {
         pageButtons.push(
           <button
+            className={styles.navigationButton}
             key={i}
             disabled={currentPage === i}
             onClick={() => handlePageChange(i)}
@@ -86,9 +341,10 @@ const Table = ({ data }) => {
       }
       pageButtons.push(
         <button
+          className={styles.navigationButton}
           key="next"
           onClick={() => handleNextPage()}
-          disabled={currentPage === totalPages}
+          disabled={currentPage === totalPagesss}
         >
           Next
         </button>
@@ -100,51 +356,68 @@ const Table = ({ data }) => {
 
       if (currentPage === 1) {
         leftButton = (
-          <button key={1} onClick={() => handlePageChange(1)}>
+          <button
+            className={styles.navigationButton}
+            key={1}
+            disabled={currentPage === 1}
+            onClick={() => handlePageChange(1)}
+          >
             {1}
           </button>
         );
         middleButton = (
-          <button key={2} onClick={() => handlePageChange(2)}>
+          <button
+            className={styles.navigationButton}
+            key={2}
+            onClick={() => handlePageChange(2)}
+          >
             {2}
           </button>
         );
         rightButton = (
-          <button key={3} onClick={() => handlePageChange(3)}>
+          <button
+            className={styles.navigationButton}
+            key={3}
+            onClick={() => handlePageChange(3)}
+          >
             {3}
           </button>
         );
-      } else if (currentPage === totalPages) {
+      } else if (currentPage === totalPagesss) {
         leftButton = (
           <button
-            key={totalPages - 2}
-            onClick={() => handlePageChange(totalPages - 2)}
-            disabled={currentPage === totalPages - 2}
+            className={styles.navigationButton}
+            key={totalPagesss - 2}
+            onClick={() => handlePageChange(totalPagesss - 2)}
+            disabled={currentPage === totalPagesss - 2}
           >
-            {totalPages - 2}
+            {totalPagesss - 2}
           </button>
         );
         middleButton = (
           <button
-            key={totalPages - 1}
-            onClick={() => handlePageChange(totalPages - 1)}
-            disabled={currentPage === totalPages - 1}
+            className={styles.navigationButton}
+            key={totalPagesss - 1}
+            onClick={() => handlePageChange(totalPagesss - 1)}
+            disabled={currentPage === totalPagesss - 1}
           >
-            {totalPages - 1}
+            {totalPagesss - 1}
           </button>
         );
         rightButton = (
           <button
-            key={totalPages}
-            disabled={currentPage === totalPages}
-            onClick={() => handlePageChange(totalPages)}
+            className={styles.navigationButton}
+            key={totalPagesss}
+            disabled={currentPage === totalPagesss}
+            onClick={() => handlePageChange(totalPagesss)}
           >
-            {totalPages}
+            {totalPagesss}
           </button>
         );
       } else {
         leftButton = (
           <button
+            className={styles.navigationButton}
             key={currentPage - 1}
             onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage === currentPage - 1}
@@ -154,6 +427,7 @@ const Table = ({ data }) => {
         );
         middleButton = (
           <button
+            className={styles.navigationButton}
             key={currentPage}
             onClick={() => handlePageChange(currentPage)}
             disabled={currentPage}
@@ -163,6 +437,7 @@ const Table = ({ data }) => {
         );
         rightButton = (
           <button
+            className={styles.navigationButton}
             key={currentPage + 1}
             onClick={() => handlePageChange(currentPage + 1)}
             disabled={currentPage === currentPage + 1}
@@ -174,6 +449,7 @@ const Table = ({ data }) => {
 
       pageButtons.push(
         <button
+          className={styles.navigationButton}
           key="prev"
           onClick={() => handlePrevPage()}
           disabled={currentPage === 1}
@@ -188,9 +464,10 @@ const Table = ({ data }) => {
 
       pageButtons.push(
         <button
+          className={styles.navigationButton}
           key="next"
           onClick={() => handleNextPage()}
-          disabled={currentPage === totalPages}
+          disabled={currentPage === totalPagesss}
         >
           Next
         </button>
@@ -210,12 +487,9 @@ const Table = ({ data }) => {
     "State",
     "Zip Code",
   ];
-
-  useEffect(() => {
-    setTotalPages(Math.ceil(data.length / displayedEntriesSelected));
-    setEmployeesCountData(data.length);
-    renderPageButtons();
-  }, [data, searchBar, orderBy, displayedEntriesSelected]);
+  let dataSortedlength2;
+  let totalPagesSearchBar;
+  let totalPagesSearchBarNope;
 
   return (
     <div className={styles.main}>
@@ -240,7 +514,7 @@ const Table = ({ data }) => {
           <input
             type="text"
             id="search"
-            onChange={(e) => setSearchBar(e.target.value)}
+            onChange={(e) => triDuMerdierDeLaSearchBar(e)}
           />
         </form>
       </div>
@@ -293,194 +567,12 @@ const Table = ({ data }) => {
             ))}
           </tr>
         </thead>
-        <tbody>
-          {data &&
-            data
-              .sort((a, b) => {
-                switch (orderBy) {
-                  case "First Name":
-                    return a.firstName && b.firstName
-                      ? a.firstName.localeCompare(b.firstName)
-                      : a.firstName
-                      ? 1
-                      : -1;
-                  case "First Namereverse":
-                    return a.firstName && b.firstName
-                      ? b.firstName.localeCompare(a.firstName)
-                      : b.firstName
-                      ? 1
-                      : -1;
-
-                  case "Last Name":
-                    return a.lastName && b.lastName
-                      ? a.lastName.localeCompare(b.lastName)
-                      : a.lastName
-                      ? 1
-                      : -1;
-                  case "Last Namereverse":
-                    return a.lastName && b.lastName
-                      ? b.lastName.localeCompare(a.lastName)
-                      : b.lastName
-                      ? 1
-                      : -1;
-                  case "Start Date":
-                    if (a.startDate && b.startDate) {
-                      return Date.parse(a.startDate) - Date.parse(b.startDate);
-                    } else if (!a.startDate) {
-                      return -Number.MAX_SAFE_INTEGER;
-                    } else {
-                      return Number.MAX_SAFE_INTEGER;
-                    }
-                  case "Start Datereverse":
-                    if (a.startDate && b.startDate) {
-                      return Date.parse(b.startDate) - Date.parse(a.startDate);
-                    } else if (!a.startDate) {
-                      return Number.MAX_SAFE_INTEGER;
-                    } else {
-                      return -Number.MAX_SAFE_INTEGER;
-                    }
-
-                  case "Department":
-                    return a.department && b.department
-                      ? a.department.localeCompare(b.department)
-                      : a.department
-                      ? 1
-                      : -1;
-                  case "Departmentreverse":
-                    return a.department && b.department
-                      ? b.department.localeCompare(a.department)
-                      : b.department
-                      ? 1
-                      : -1;
-
-                  case "Date of Birth":
-                    if (a.dateOfBirth && b.dateOfBirth) {
-                      return (
-                        Date.parse(a.dateOfBirth) - Date.parse(b.dateOfBirth)
-                      );
-                    } else if (!a.dateOfBirth) {
-                      return -Number.MAX_SAFE_INTEGER;
-                    } else {
-                      return Number.MAX_SAFE_INTEGER;
-                    }
-                  case "Date of Birthreverse":
-                    if (a.dateOfBirth && b.dateOfBirth) {
-                      return (
-                        Date.parse(b.dateOfBirth) - Date.parse(a.dateOfBirth)
-                      );
-                    } else if (!a.dateOfBirth) {
-                      return Number.MAX_SAFE_INTEGER;
-                    } else {
-                      return -Number.MAX_SAFE_INTEGER;
-                    }
-                  case "Street":
-                    return a.street && b.street
-                      ? a.street.localeCompare(b.street)
-                      : a.street
-                      ? 1
-                      : -1;
-                  case "Streetreverse":
-                    return a.street && b.street
-                      ? b.street.localeCompare(a.street)
-                      : b.street
-                      ? 1
-                      : -1;
-                  case "City":
-                    return a.city && b.city
-                      ? a.city.localeCompare(b.city)
-                      : a.city
-                      ? 1
-                      : -1;
-                  case "Cityreverse":
-                    return a.city && b.city
-                      ? b.city.localeCompare(a.city)
-                      : b.city
-                      ? 1
-                      : -1;
-                  case "State":
-                    return a.State && b.State
-                      ? a.State.localeCompare(b.State)
-                      : a.State
-                      ? 1
-                      : -1;
-                  case "Statereverse":
-                    return a.State && b.State
-                      ? b.State.localeCompare(a.State)
-                      : b.State
-                      ? 1
-                      : -1;
-                  case "Zip Code":
-                    if (a.zipCode && b.zipCode) {
-                      return a.zipCode - b.zipCode;
-                    } else if (a.zipCode) {
-                      return 1;
-                    } else if (b.zipCode) {
-                      return -1;
-                    } else {
-                      return 0;
-                    }
-                  case "Zip Codereverse":
-                    if (a.zipCode && b.zipCode) {
-                      return b.zipCode - a.zipCode;
-                    } else if (a.zipCode) {
-                      return -1;
-                    } else if (b.zipCode) {
-                      return 1;
-                    } else {
-                      return 0;
-                    }
-                }
-              })
-              .slice(startIndex, endIndex)
-              .filter((item) =>
-                Object.entries(item).some(
-                  ([key, value]) =>
-                    key !== "_id" &&
-                    key !== "createdAt" &&
-                    key !== "updatedAt" &&
-                    key !== "__v" &&
-                    value &&
-                    value
-                      .toString()
-                      .toLowerCase()
-                      .includes(searchBar.toString().toLowerCase())
-                )
-              )
-              .map((employee, index) => (
-                <tr key={employee._id}>
-                  <TableLine employee={employee} index={index} />
-                </tr>
-              ))}
-        </tbody>
+        {}
+        <tbody>{ttt()}</tbody>
       </table>
-      {/* <div className={styles.entryCounter}>
-        Showing 1 of 10 of {employeesCountData} entries
-      </div> */}
       <div className={styles.tableFooter}>
-        {/* <button onClick={handlePrevPage} disabled={currentPage === 1}>
-          Previous
-        </button>
-        {renderPageButtons()}
-        <button onClick={handleNextPage} disabled={currentPage === totalPages}>
-          Next
-        </button> */}
-        {/* <button
-          key="prev"
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1}
-          className={styles.previousBut}
-        >
-          Previous
-        </button> */}
-        <div>{renderPageButtons()}</div>
-        {/* <button
-          key="next"
-          onClick={() => handlePageChange(currentPage + 1)}
-          disabled={currentPage === totalPages}
-          className={styles.NextBut}
-        >
-          Next
-        </button> */}
+        <div>{information()}</div>
+        <div className={styles.buttons}>{renderPageButtons()}</div>
       </div>
     </div>
   );

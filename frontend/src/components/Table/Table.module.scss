@@ -158,3 +158,48 @@ table td:hover:after {
   padding: 10px;
   box-shadow: 0px 0px 6px 0px #000;
 }
+
+.tableFooter {
+  display: flex;
+  height: 30px;
+  justify-content: space-between;
+  align-items: center;
+
+  .buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-right: 20px;
+    width: 180px;
+
+    .navigationButton {
+      border: none;
+      background-color: white;
+      padding: 5px;
+      font-size: 14px;
+      min-width: 30px;
+    }
+    .navigationButton:not([disabled]):hover {
+      border: none;
+      color: white;
+      padding: 5px;
+      border-radius: 2px;
+      min-width: 30px;
+      background-image: linear-gradient(to bottom, #535353, #000000);
+      font-size: 14px;
+    }
+  }
+}
+
+.noMatching {
+  width: 1300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: visible;
+  text-overflow: clip;
+  height: 40px;
+  background-color: rgb(241, 241, 241);
+  font-size: 16px;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+}
